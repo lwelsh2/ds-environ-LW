@@ -169,16 +169,27 @@ crs(beachiecrek_rast, proj = TRUE) == crs(holidayfarm_rast, proj = TRUE)
 b. Now convert the Terwilliger crs to the holiday crs. If the resolution is different, change it to match Holiday's resolution.
 
 ```{r}
+template_rast <- holidayfarm_rast
+terwilliger_rast_20 <- resample(terwilliger_rast, template_rast, method = "bilinear")
 
-# This should return TRUE TRUE
+terwilliger_rast <- project(terwilliger_rast, crs(holidayfarm_rast))
 crs(terwilliger_rast, proj = TRUE) == crs(holidayfarm_rast, proj = TRUE)
-res(terwilliger_rast)[2] == res(holidayfarm_rast)[2]
+
 ```
 
 c. Now you can plot all of the fires on the same map!
 HINT: Remember to re-make the dataframes.
 
 ```{r plot-projected-raster1}
+beachiecrek_df <- as.data.frame(beachiecrek_rast, xy = TRUE)
+holidayfarm_df <- as.data.frame(holidayfarm_rast, xy = TRUE)
+terwilliger_df <- as.data.frame(terwilliger_rast, xy = TRUE)
+
+ggplot() +
+  geom_raster(data = beachiecrek_df, aes(x = x, y = y, fill = Layer_1)) +
+  geom_raster(data = holidayfarm_df, aes(x = x, y = y, fill = Layer_1)) +
+  geom_raster(data = terwilliger_df, aes(x = x, y = y, fill = SoilBurnSe)) +
+  scale_fill_brewer(palette = "Spectral", direction=-1)
 
 ```
 
@@ -197,11 +208,26 @@ Somethings you will need to be careful of:
 
 ```{r}
 
+terwilliger_df$SoilBurnSe <- as.character(terwilliger_df$SoilBurnSe)
+
+
+terwilliger_df$SoilBurnSe[terwilliger_df$SoilBurnSe == "High"] <- "4"
+terwilliger_df$SoilBurnSe[terwilliger_df$SoilBurnSe == "Moderate"] <- "3"
+terwilliger_df$SoilBurnSe[terwilliger_df$SoilBurnSe == "Low"] <- "2"
+terwilliger_df$SoilBurnSe[terwilliger_df$SoilBurnSe == "Unburned"] <- "1"
+
+terwilliger_df$SoilBurnSe <- factor(terwilliger_df$SoilBurnSe)
+
 ```
 
 e. Try plotting again. 
 
 ```{r plot-projected-raster2}
+ggplot() +
+  geom_raster(data = beachiecrek_df, aes(x = x, y = y, fill = Layer_1)) +
+  geom_raster(data = holidayfarm_df, aes(x = x, y = y, fill = Layer_1)) +
+  geom_raster(data = terwilliger_df, aes(x = x, y = y, fill = SoilBurnSe)) +
+  scale_fill_brewer(palette = "Spectral", direction=-1)
 
 ```
 The scale bar make sense! It would be nice to have a baselayer map to see where is Oregon these fires are.
@@ -213,17 +239,27 @@ I found a nice ecoregion map on the OR spatial data website. https://spatialdata
 a. Load the data into R, it is in the OR-ecoregions folder.
 
 ```{r oreco}
+oregon_ecoregions <- st_read("/Users/lwelsh/Desktop/ds-environ-LW/5-OR-fires/OR-ecoregions/Ecoregions_OregonConservationStrategy.shp")
 
 ```
 b. Check the projection and re-project if needed. We did not cover this in the lecture demo, but for vector data, use st_transform()
 
 ```{r or-crs}
+st_crs(oregon_ecoregions) == st_crs(holidayfarm_rast)
 
+oregon_ecoregions <- st_transform(oregon_ecoregions, crs(holidayfarm_rast))
+st_crs(oregon_ecoregions) == st_crs(holidayfarm_rast)
 ```
 
 c. Plot all of the data together (the rasters and vector data). You can layer on geom_sf into ggplot with the other rasters just like you would add another raster. 
 
 ```{r plot-projected-raster-withmap}
+ggplot() +
+  geom_raster(data = beachiecrek_df, aes(x = x, y = y, fill = Layer_1)) +
+  geom_raster(data = holidayfarm_df, aes(x = x, y = y, fill = Layer_1)) +
+  geom_raster(data = terwilliger_df, aes(x = x, y = y, fill = SoilBurnSe)) +
+  geom_sf(data = oregon_ecoregions, fill = NA, color = "black") +
+  scale_fill_brewer(palette = "Spectral", direction=-1)
 
 ```
 We could get fancy and zoom into the correct region using extent, which we will cover next week. For now, this looks pretty good. 
@@ -237,12 +273,19 @@ a. Create a barplot with the count of each fire severity category.
 HINT: Rather annoyingly, you will need to convert the layer values to factors again to get fill to recognize them. EX: fill=as.factor(Layer_1)
 
 ```{r plot-hist}
+names(terwilliger_df)[names(terwilliger_df) == "SoilBurnSe"] <- "Layer_1"
+all_fires_df <- rbind(beachiecrek_df, holidayfarm_df, terwilliger_df)
+
+ggplot(all_fires_df, aes(x = as.factor(Layer_1), y = (..count..)/sum(..count..), fill = as.factor(Layer_1))) +
+  geom_bar(position = "dodge") +
+  scale_fill_brewer(palette = "Spectral", direction = -1) +
+  labs(x = "Severity", y = "Proportion", title = "Proportion of Fire Severity Categories")
 
 
 
 ```
 b. What do you notice about the frequency of different severity classes when you compare these barplots. How does this relate to the Haldofsky reading?
-ANSWER: 
+ANSWER: Low and Moderate are the most frequent, with moderate significantly higher than low. The reading discussed how burned areas were already at higher risk of reburn, this could be shown in the data as moderate and low burn sites could be reburning
 
 Also, if the legend label bothers you (as it does for me)
 Check out this tutorial:
