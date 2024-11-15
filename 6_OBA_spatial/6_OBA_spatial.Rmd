@@ -1,0 +1,230 @@
+---
+title: "Exploring bee-related spatial data"
+output: github_document
+author:
+  - Lauren Ponisio
+---
+
+<!-- Lesson Overview -->
+
+# Conservation/ecology Topics 
+
+> - Species distributions 
+
+# Computational Topics
+> -  Convert a data frame to a spatial object.
+> -  Plot multiple spatial layers.
+
+-------------------------------
+```{r load-libraries, echo=FALSE, results="hide", message=FALSE, warning=FALSE}
+library(terra)
+library(ggplot2)
+library(dplyr)
+library(sf)
+```
+
+# Lab part 1: Oregon bee atlas data exploration 
+
+a. Import the OBA data.
+```{r}
+oba_data <- read.csv("/Users/lwelsh/Desktop/ds-environ-LW/6_OBA_spatial/OBA_2018-2023.csv")
+```
+
+b. Find the columns related to genus and species and paste them together (with a space between) using the function paste(). Name the new column GenusSpecies.
+```{r}
+oba_data$GenusSpecies <- paste(oba_data$Genus, oba_data$Species)
+
+
+```
+
+c. Use `sort()` and `unique()` to print the unique values of GenusSpecies in alphabetical order.  How many species are there? 
+
+```{r}
+unique_species <- sort(unique(oba_data$GenusSpecies))
+print(unique_species)
+
+num_species <- length(unique_species)
+print(paste(num_species))
+
+```
+
+Some specimens are not identified to species, only genus. How is this reflected in the data? 
+In two weeks we will learn how to clean this up using regular expressions. 
+
+d. So many bees, so little time. Count up the occurrences of each bee species, and subset the data to bees that have been seen at least two times. 
+You can use the tidyverse or any other functions in R that you like. How many "species" are there? 
+
+```{r}
+species_counts <- oba_data %>%
+  count(GenusSpecies) %>%
+  filter(n >= 2)
+print(species_counts)
+
+num_species_seen_twice <- nrow(species_counts)
+print(num_species_seen_twice)
+
+```
+
+e. Google a few bee names (that have been seen > 2 times) and find one with an a look that resonates with you.
+
+
+
+```{r}
+crs("EPSG:4326")
+```
+What is the name of your bee? 
+Bombus huntii
+Import the photos into Rmarkdown below (hint: googling bee name "discover life" or "inat" can often get you a photo. Many bees will no have any photos :( 
+
+
+![](/Users/lwelsh/Desktop/ds-environ-LW/bee.png)
+
+
+# Lab part 2: Plotting the distrubution of your spirit bee. 
+
+How that have chosen your spirit bee, we would like to plot it's distribution. What is the crs of the data? Annoyingly it is not described anywhere in the spreadsheet (always list your crs in your data) but it is the same as what inat uses because all bees have a georeferenced plant host. If the data is in lat long, it is "unprojected" so only a datum will be listed. 
+DATUM: WGS84, unprojected lat long. EPSG code: 4326. 
+
+a. Extract the X and Y locations for your species only from the data and create a spatial object. Don't forget to set the CRS! 
+Hint 1: consider what other data you would like to keep as attributes, for example what flower they were foraging on. Hint 2: Remember the lat is y and long is x. 
+Hint 3: You may want to rename the column names you can use, colnames() and reassign the names, since the ones in the oba data spreadsheet are really ugly. 
+
+```{r}
+species_data <- oba_data %>%
+  filter(GenusSpecies == "Bombus huntii") %>%
+  select(Latitude = Dec..Lat., Longitude = Dec..Long., Flower = Associated.plant...genus..species, Month = Month.1)
+
+colnames(species_data) <- c("Latitude", "Longitude", "Flower", "Month")
+
+species_sf <- st_as_sf(species_data, coords = c("Longitude", "Latitude"), crs = 4326)
+print(species_sf)
+# Convert the 'Month' column to lowercase
+species_sf$Month <- tolower(species_sf$Month)
+```
+
+b. Plot your exciting bee data!
+
+```{r plot-data-points}
+ggplot(data = species_sf) +
+  geom_sf(aes(color = Flower)) +
+  labs(
+    title = "Flowers visited by Bombus huntii
+    ",
+    x = "Longitude",
+    y = "Latitude"
+  ) + theme(legend.position = "none")
+```
+
+Not so exciting without some kind of background... 
+
+Luckily we can download basemaps into R using the map_data function in ggplot (among many others). There is an example for retrieving the Oregon county polygons. 
+
+```{r plot-or}
+or <- map_data("county", "oregon") %>% 
+  select(lon = long, lat, group, id = subregion)
+
+```
+
+c. Add your species's points to your choice or an Oregon basemap. 
+
+```{r plot-data-points-basemap}
+library(ggspatial)
+ggplot() +
+  geom_polygon(data = or, aes(x = lon, y = lat, group = group), fill = "lightgrey", color = "black") +
+  geom_sf(data = species_sf, aes(color = Flower), size = 3) +
+  theme_minimal() +
+  labs(
+    title = "Flowers visited by Bombus huntii",
+    x = "Longitude",
+    y = "Latitude",
+  ) +
+  theme(legend.position = "none")
+
+```
+# Lab part 3: Cartography
+
+a. Here is your moment to explore your cartographic skills. 
+1. Add another spatial layer relevant to your final project and tweek the Oregon map in anyway that is useful/visually appealing. You may need to crop that layer to the extent of your species's distribution. 
+2. Color your points according to some data attribute and add a legend (month collected, county, collector, associated plant, whatever you think is interesting). You may need to circle back to 2.1 to save
+additional attributes when you converted the dataframe to a spatial object. 
+3. Fine-tune your map: add a title, make sure the legend label makes sense, add a scale bar (google "add scale bar map ggplot" and choose your favorite package). All maps must always have a scale bar. You can add a N arrow as well, though some cartographers argue that is only necessary if N isn't at the top of the map.
+4. Write a figure caption for your map explaining any interesting trends you see. 
+5. Export you cropped layer to a .shp so you can use it again for your final project.
+6. Push this lab to your github repo (just the .Rmd, don't push the data!)
+
+```{r plot-creative}
+ggplot() +
+  geom_polygon(data = or, aes(x = lon, y = lat, group = group), fill = "lightgrey", color = "black") +
+  geom_sf(data = species_sf, aes(color = Month), size = 3) +
+  theme_minimal() +
+  labs(
+    title = "Bombus huntii Distribution Across Months",
+    x = "Longitude",
+    y = "Latitude",
+    color = "Month Collected"
+  ) +
+  annotation_scale(location = "tl", width_hint = 0.2) +
+  annotation_north_arrow(location = "tr", width = unit(.5, "in")) +
+  theme(
+    legend.position = "right", # Position the legend
+    legend.title = element_text(size = 12), # Title size
+    legend.text = element_text(size = 10) # Text size
+  )
+st_write(species_sf, "bee_species_layer.shp", append = TRUE)
+
+```
+"The fist interesting thing that is immediately noticable is the lack of 3 months in the dataset. I am unsure if they were not present or if I chose the wrong column. However, this map does show that concentrated clumps of flowers were visited in specific months. In the flower map above, the species in the middle,colored cyan, was visited heavily in month ix, while a few rarer species were visited heavly in the bottom left of the map exclusively in month viii.
+We are looking forward to seeing the maps you create! 
+
+# Lab part 4: Spatial summary statistics
+ For your final projects, you will likely need to come up with summary statistics that describes the areas around where bees are captured. 
+a. Using the distribution of your chosen bee and the spatial layer you imported in 2.6, extract a meaningful summary statistics from your spatial layer within a buffer of 500, 750 1000 km.
+b. Create a plot that illustrates this summary data (box plot, barplot, scatter plot, historgram). 
+c. Create a map of your cropped spatial data.
+
+```{r buffers}
+buffer_500 <- st_buffer(species_sf, dist = 500000)  # 500 km buffer
+buffer_750 <- st_buffer(species_sf, dist = 750000)  # 750 km buffer
+buffer_1000 <- st_buffer(species_sf, dist = 1000000) # 1000 km buffer
+
+flowers_within_500 <- st_intersection(species_sf, buffer_500)
+flowers_within_750 <- st_intersection(species_sf, buffer_750)
+flowers_within_1000 <- st_intersection(species_sf, buffer_1000)
+
+summary_500 <- nrow(flowers_within_500)  # Count of flowers within 500 km
+summary_750 <- nrow(flowers_within_750)  # Count of flowers within 750 km
+summary_1000 <- nrow(flowers_within_1000) # Count of flowers within 1000 km
+
+summary_data <- data.frame(
+  Buffer = c("500 km", "750 km", "1000 km"),
+  Flower_Count = c(summary_500, summary_750, summary_1000)
+)
+
+summary_data
+
+ggplot(summary_data, aes(x = Buffer, y = Flower_Count, fill = Buffer)) +
+  geom_bar(stat = "identity") +
+  labs(
+    title = "Flower Counts within Buffers Around Bee Locations",
+    x = "Buffer Radius (km)",
+    y = "Flower Count"
+  ) +
+  theme_minimal()
+
+
+```
+```{r}
+ggplot() +
+  geom_sf(data = buffer_1000, fill = "transparent", color = "blue", linetype = "dashed") +
+  geom_sf(data = flowers_within_1000, aes(color = "Flowers"), size = 3) +
+  geom_sf(data = buffer_750, fill = "transparent", color = "green", linetype = "dashed") +
+  geom_sf(data = buffer_500, fill = "transparent", color = "red", linetype = "dashed") +
+  theme_minimal() +
+  labs(
+    title = "Flowers within Buffers Around Bee Locations",
+    color = "Flower Presence"
+  ) +
+  theme(legend.position = "none")
+
+```
+

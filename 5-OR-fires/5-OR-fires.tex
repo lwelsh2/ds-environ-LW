@@ -1,0 +1,937 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Lab 5 Oregon Fires},
+  pdfauthor={Lauren Ponisio},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Lab 5 Oregon Fires}
+\author{Lauren Ponisio}
+\date{}
+
+\begin{document}
+\maketitle
+
+\hypertarget{conservationecology-topics}{%
+\subsection{Conservation/ecology
+Topics}\label{conservationecology-topics}}
+
+\begin{quote}
+\begin{itemize}
+\tightlist
+\item
+  Explore how Oregon fires are changing due to fire suppression and
+  climate change.
+\item
+  Describe fundamental concepts in fire ecology, including fire
+  severity.
+\end{itemize}
+\end{quote}
+
+\hypertarget{statistical-topics}{%
+\section{Statistical Topics}\label{statistical-topics}}
+
+\begin{quote}
+\begin{itemize}
+\tightlist
+\item
+  Describe the fundamental attributes of a raster dataset.
+\end{itemize}
+\end{quote}
+
+\hypertarget{computational-topics}{%
+\section{Computational Topics}\label{computational-topics}}
+
+\begin{quote}
+\begin{itemize}
+\tightlist
+\item
+  Explore raster attributes and metadata using R.
+\item
+  Import rasters into R using the \texttt{terra} package.
+\item
+  Plot raster files in R using the \texttt{ggplot2} package.
+\item
+  Reproject raster and vector data
+\item
+  Layer raster and vector data together
+\end{itemize}
+\end{quote}
+
+\hypertarget{lab-part-1-reading-in-fire-raster-data-and-plotting}{%
+\section{Lab part 1: reading in fire raster data and
+plotting}\label{lab-part-1-reading-in-fire-raster-data-and-plotting}}
+
+We will be working with the soil burn severity data from the 2020
+Holiday Farm Fire (up the McKenzie E of Eugene), the 2020 Beachie Fire
+(near Portland) and the 2018 Terwilliger fire (up the McKenzie E of
+Eugene, near Cougar hotsprings).
+
+We will use data downloaded from the USGS:
+\url{https://burnseverity.cr.usgs.gov/products/baer}
+
+Specifically, BARC Fire Severity layers are created by first calculating
+spectral indices from pre- and post-fire satellite imagery that are
+sensitive to changes caused by fire. The two images are then subtracted
+showing the difference between them which is then binned into 4 burn
+severity classes (high, moderate, low, very low/unburned). Field crews
+ground-truth the severity classes.
+
+The metadata files provide additional details on how the continuous data
+was binned into discrete catagories.
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\tightlist
+\item
+  Read in each fire severity rasters, name them {[}fire name{]}\_rast.
+  The .tif files are the rasters.
+\end{enumerate}
+
+HINT: The files are nested within folders so be aware of your file
+paths.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{terwilliger\_rast }\OtherTok{\textless{}{-}} \FunctionTok{rast}\NormalTok{(}\StringTok{"/Users/lwelsh/Desktop/ds{-}environ{-}LW/5{-}OR{-}fires/soil{-}burn{-}severity/2018\_terwilliger\_sbs/SoilSeverity.tif"}\NormalTok{)}
+\NormalTok{beachiecrek\_rast }\OtherTok{\textless{}{-}} \FunctionTok{rast}\NormalTok{(}\StringTok{"/Users/lwelsh/Desktop/ds{-}environ{-}LW/5{-}OR{-}fires/soil{-}burn{-}severity/2020\_beachiecreek\_sbs/BeachieCreek\_SBS\_final.tif"}\NormalTok{)}
+\NormalTok{holidayfarm\_rast }\OtherTok{\textless{}{-}} \FunctionTok{rast}\NormalTok{(}\StringTok{"/Users/lwelsh/Desktop/ds{-}environ{-}LW/5{-}OR{-}fires/soil{-}burn{-}severity/2020\_holidayfarm\_sbs/HolidayFarm\_SBS\_final.tif"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Summarize the values of the rasters. Take note of the labels
+  associated with the data values because you will need it for plotting.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(}\FunctionTok{values}\NormalTok{(terwilliger\_rast))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    SoilBurnSe   
+##  Min.   :1.00   
+##  1st Qu.:2.00   
+##  Median :2.00   
+##  Mean   :1.92   
+##  3rd Qu.:2.00   
+##  Max.   :4.00   
+##  NA's   :80287
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(}\FunctionTok{values}\NormalTok{(beachiecrek\_rast))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     Layer_1      
+##  Min.   :  1.00  
+##  1st Qu.:  3.00  
+##  Median :127.00  
+##  Mean   : 71.77  
+##  3rd Qu.:127.00  
+##  Max.   :127.00
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(}\FunctionTok{values}\NormalTok{(holidayfarm\_rast))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     Layer_1      
+##  Min.   :  1.00  
+##  1st Qu.:  3.00  
+##  Median :  4.00  
+##  Mean   : 60.83  
+##  3rd Qu.:127.00  
+##  Max.   :127.00
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Plot each raster.. Set the scale to be
+  \texttt{scale\_fill\_brewer(palette\ =\ "Spectral",\ direction=-1)}
+\end{enumerate}
+
+HINT: Remember we have to turn them into ``data.frames'' for ggplot to
+recognize them as plot-able.
+
+HINT HINT: Remember to check the labels of the data values to be able to
+set the fill.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{terwilliger\_df }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(terwilliger\_rast, }\AttributeTok{xy =} \ConstantTok{TRUE}\NormalTok{)}
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+}
+    \FunctionTok{geom\_raster}\NormalTok{(}\AttributeTok{data =}\NormalTok{ terwilliger\_df , }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ x, }\AttributeTok{y =}\NormalTok{ y, }\AttributeTok{fill =}\NormalTok{ SoilBurnSe)) }\SpecialCharTok{+}
+    \FunctionTok{scale\_fill\_brewer}\NormalTok{(}\AttributeTok{palette =} \StringTok{"Spectral"}\NormalTok{, }\AttributeTok{direction=}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+\centering
+\includegraphics{5-OR-fires_files/figure-latex/ggplot-raster1-1.pdf}
+\caption{Holiday plot with ggplot2 using the Spectral color scale}
+\end{figure}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{beachiecrek\_df }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(beachiecrek\_rast, }\AttributeTok{xy =} \ConstantTok{TRUE}\NormalTok{)}
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+}
+    \FunctionTok{geom\_raster}\NormalTok{(}\AttributeTok{data =}\NormalTok{ beachiecrek\_df , }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ x, }\AttributeTok{y =}\NormalTok{ y, }\AttributeTok{fill =}\NormalTok{ Layer\_1)) }\SpecialCharTok{+}
+    \FunctionTok{scale\_fill\_brewer}\NormalTok{(}\AttributeTok{palette =} \StringTok{"Spectral"}\NormalTok{, }\AttributeTok{direction=}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Raster pixels are placed at uneven horizontal intervals and will be shifted
+## i Consider using `geom_tile()` instead.
+\end{verbatim}
+
+\begin{figure}
+\centering
+\includegraphics{5-OR-fires_files/figure-latex/ggplot-raster2-1.pdf}
+\caption{Beachie plot with ggplot2 using the Spectral color scale}
+\end{figure}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{holidayfarm\_df }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(holidayfarm\_rast, }\AttributeTok{xy =} \ConstantTok{TRUE}\NormalTok{)}
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+}
+    \FunctionTok{geom\_raster}\NormalTok{(}\AttributeTok{data =}\NormalTok{ holidayfarm\_df , }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ x, }\AttributeTok{y =}\NormalTok{ y, }\AttributeTok{fill =}\NormalTok{ Layer\_1)) }\SpecialCharTok{+}
+    \FunctionTok{scale\_fill\_brewer}\NormalTok{(}\AttributeTok{palette =} \StringTok{"Spectral"}\NormalTok{, }\AttributeTok{direction=}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Raster pixels are placed at uneven horizontal intervals and will be shifted
+## i Consider using `geom_tile()` instead.
+\end{verbatim}
+
+\begin{figure}
+\centering
+\includegraphics{5-OR-fires_files/figure-latex/ggplot-raster3-1.pdf}
+\caption{Terwilliger plot with ggplot2 using the Spectral color scale}
+\end{figure}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  Compare these visualizations what is something you notice? -ANSWER:
+\end{enumerate}
+
+\hypertarget{lab-part-2-exploring-the-attributes-of-our-spatial-data.}{%
+\section{Lab part 2: Exploring the attributes of our spatial
+data.}\label{lab-part-2-exploring-the-attributes-of-our-spatial-data.}}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\tightlist
+\item
+  What are the crs of the rasters? What are the units? Are they all the
+  same?
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{crs}\NormalTok{(terwilliger\_rast, }\AttributeTok{proj =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "+proj=aea +lat_0=34 +lon_0=-120 +lat_1=43 +lat_2=48 +x_0=600000 +y_0=0 +datum=NAD83 +units=m +no_defs"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{crs}\NormalTok{(beachiecrek\_rast, }\AttributeTok{proj =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "+proj=aea +lat_0=34 +lon_0=-120 +lat_1=43 +lat_2=48 +x_0=600000 +y_0=0 +datum=NAD83 +units=m +no_defs"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{crs}\NormalTok{(holidayfarm\_rast, }\AttributeTok{proj =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "+proj=utm +zone=10 +datum=NAD83 +units=m +no_defs"
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  ANSWER crs: Holiday:``+proj=utm +zone=10 +datum=NAD83 +units=m
+  +no\_defs'' Beachie:``+proj=aea +lat\_0=34 +lon\_0=-120 +lat\_1=43
+  +lat\_2=48 +x\_0=600000 +y\_0=0 +datum=NAD83 +units=m +no\_defs''
+  Terwilliger:``+proj=aea +lat\_0=34 +lon\_0=-120 +lat\_1=43 +lat\_2=48
+  +x\_0=600000 +y\_0=0 +datum=NAD83 +units=m +no\_defs''
+\item
+  ANSWER units: Holiday: m Beachie:m Terwilliger:m
+\item
+  ANSWER the same? :terwilliger and beachiecrek are the same The same?
+  all of them use m
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  What about the resolution of each raster?
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{res}\NormalTok{(terwilliger\_rast)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 30 30
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{res}\NormalTok{(beachiecrek\_rast)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 20 20
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{res}\NormalTok{(holidayfarm\_rast)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 20 20
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  ANSWER resolution: Holiday: 20 20 Beachie: 20 20 Terwilliger: 30 30
+\item
+  ANSWER the same? : The same? Holiday and Beachie are the same,
+  Terwilliger is different
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Calculate the min and max values of each raster. Are they all the
+  same?
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{minmax}\NormalTok{(terwilliger\_rast)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     SoilBurnSe
+## min          1
+## max          4
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{min}\NormalTok{(}\FunctionTok{values}\NormalTok{(terwilliger\_rast))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] NA
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{max}\NormalTok{(}\FunctionTok{values}\NormalTok{(terwilliger\_rast))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] NA
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{minmax}\NormalTok{(beachiecrek\_rast)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     Layer_1
+## min       1
+## max     127
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{min}\NormalTok{(}\FunctionTok{values}\NormalTok{(beachiecrek\_rast))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{max}\NormalTok{(}\FunctionTok{values}\NormalTok{(beachiecrek\_rast))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 127
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{minmax}\NormalTok{(holidayfarm\_rast)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     Layer_1
+## min       1
+## max     127
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{min}\NormalTok{(}\FunctionTok{values}\NormalTok{(holidayfarm\_rast))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{max}\NormalTok{(}\FunctionTok{values}\NormalTok{(holidayfarm\_rast))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 127
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  ANSWER minmax: Holiday: 1 127 Beachie: 1 127 Terwilliger: 1 4
+\item
+  ANSWER the same? : The same? Holiday and Beachie are the same,
+  Terwilliger is different
+\end{itemize}
+
+Given we expect there to be 4 values for each bin of severity (high,
+moderate, low, very low/unburned), let's try to work out why there are
+values other than 1-4. After checking the metadata .txt and inspecting
+the metadata in the raster itself, I could not find an explicit mention
+of the meaning on the non 1-4 data (maybe you can?). Not great practices
+USGS! But it is likely missing data. Let's convert the Holiday data
+greater than 4 to NA, just like we would a regular matrix of data.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{holidayfarm\_rast[holidayfarm\_rast }\SpecialCharTok{\textgreater{}} \DecValTok{4}\NormalTok{] }\OtherTok{\textless{}{-}} \ConstantTok{NA}
+\FunctionTok{summary}\NormalTok{(}\FunctionTok{values}\NormalTok{(holidayfarm\_rast))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     Layer_1       
+##  Min.   :1.0      
+##  1st Qu.:2.0      
+##  Median :3.0      
+##  Mean   :2.8      
+##  3rd Qu.:3.0      
+##  Max.   :4.0      
+##  NA's   :1536190
+\end{verbatim}
+
+That's better :)
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  Do the same conversion for Beachie.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{beachiecrek\_rast[beachiecrek\_rast }\SpecialCharTok{\textgreater{}} \DecValTok{4}\NormalTok{] }\OtherTok{\textless{}{-}} \ConstantTok{NA}
+\FunctionTok{summary}\NormalTok{(}\FunctionTok{values}\NormalTok{(beachiecrek\_rast))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     Layer_1       
+##  Min.   :1.0      
+##  1st Qu.:2.0      
+##  Median :3.0      
+##  Mean   :2.7      
+##  3rd Qu.:3.0      
+##  Max.   :4.0      
+##  NA's   :2437627
+\end{verbatim}
+
+\hypertarget{lab-part-3-reprojection}{%
+\section{Lab part 3: Reprojection}\label{lab-part-3-reprojection}}
+
+From our exploration above, the rasters are not in the same projection,
+so we will need to re-project them if we are going to be able to plot
+them together.
+
+We can use the \texttt{project()} function to reproject a raster into a
+new CRS. The syntax is \texttt{project(RasterObject,\ crs)}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\tightlist
+\item
+  First we will reproject our \texttt{beachie\_rast} raster data to
+  match the \texttt{holidat\_rast} CRS. If the resolution is different,
+  change it to match Holiday's resolution.
+\end{enumerate}
+
+Don't change the name from beachie\_rast.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# This should return TRUE}
+\NormalTok{beachiecrek\_rast }\OtherTok{=} \FunctionTok{project}\NormalTok{(beachiecrek\_rast, }\FunctionTok{crs}\NormalTok{(holidayfarm\_rast))}
+\FunctionTok{crs}\NormalTok{(beachiecrek\_rast, }\AttributeTok{proj =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{==} \FunctionTok{crs}\NormalTok{(holidayfarm\_rast, }\AttributeTok{proj =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Now convert the Terwilliger crs to the holiday crs. If the resolution
+  is different, change it to match Holiday's resolution.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{template\_rast }\OtherTok{\textless{}{-}}\NormalTok{ holidayfarm\_rast}
+\NormalTok{terwilliger\_rast\_20 }\OtherTok{\textless{}{-}} \FunctionTok{resample}\NormalTok{(terwilliger\_rast, template\_rast, }\AttributeTok{method =} \StringTok{"bilinear"}\NormalTok{)}
+
+\NormalTok{terwilliger\_rast }\OtherTok{\textless{}{-}} \FunctionTok{project}\NormalTok{(terwilliger\_rast, }\FunctionTok{crs}\NormalTok{(holidayfarm\_rast))}
+\FunctionTok{crs}\NormalTok{(terwilliger\_rast, }\AttributeTok{proj =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{==} \FunctionTok{crs}\NormalTok{(holidayfarm\_rast, }\AttributeTok{proj =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Now you can plot all of the fires on the same map! HINT: Remember to
+  re-make the dataframes.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{beachiecrek\_df }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(beachiecrek\_rast, }\AttributeTok{xy =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{holidayfarm\_df }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(holidayfarm\_rast, }\AttributeTok{xy =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{terwilliger\_df }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(terwilliger\_rast, }\AttributeTok{xy =} \ConstantTok{TRUE}\NormalTok{)}
+
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_raster}\NormalTok{(}\AttributeTok{data =}\NormalTok{ beachiecrek\_df, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ x, }\AttributeTok{y =}\NormalTok{ y, }\AttributeTok{fill =}\NormalTok{ Layer\_1)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_raster}\NormalTok{(}\AttributeTok{data =}\NormalTok{ holidayfarm\_df, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ x, }\AttributeTok{y =}\NormalTok{ y, }\AttributeTok{fill =}\NormalTok{ Layer\_1)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_raster}\NormalTok{(}\AttributeTok{data =}\NormalTok{ terwilliger\_df, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ x, }\AttributeTok{y =}\NormalTok{ y, }\AttributeTok{fill =}\NormalTok{ SoilBurnSe)) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_brewer}\NormalTok{(}\AttributeTok{palette =} \StringTok{"Spectral"}\NormalTok{, }\AttributeTok{direction=}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Raster pixels are placed at uneven horizontal intervals and will be shifted
+## i Consider using `geom_tile()` instead.
+## Raster pixels are placed at uneven horizontal intervals and will be shifted
+## i Consider using `geom_tile()` instead.
+\end{verbatim}
+
+\includegraphics{5-OR-fires_files/figure-latex/plot-projected-raster1-1.pdf}
+
+Well that's annoying. It appears as though in 2018 the makers of these
+data decided to give 1,2,3,4 categorical names which are being
+interpreted as two different scales. If we look at the terwilliger\_rast
+values we can see that in min max.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{terwilliger\_rast}\SpecialCharTok{$}\NormalTok{SoilBurnSe}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## class       : SpatRaster 
+## dimensions  : 518, 278, 1  (nrow, ncol, nlyr)
+## resolution  : 29.97944, 29.97944  (x, y)
+## extent      : 558901, 567235.3, 4870585, 4886114  (xmin, xmax, ymin, ymax)
+## coord. ref. : NAD83 / UTM zone 10N (EPSG:26910) 
+## source(s)   : memory
+## categories  : SoilBurnSe, BAER_Acres 
+## name        : SoilBurnSe 
+## min value   :   Unburned 
+## max value   :       High
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  Let's deal with the the easy way and modify the dataframe. Convert
+  High to 4, Moderate to 3, Low to 2, and Unburned to 1 using your data
+  subsetting skills.
+\end{enumerate}
+
+Somethings you will need to be careful of: - If you check the class of
+terwilliger\_rast\_df\$SoilBurnSe it is a factor, which is a special
+class of data that are ordered categories with specific levels. R will
+not let you convert add a level. So first, convert the data to
+characters (using as.character()). - Now the data are characters, so you
+will not be able to add in numerics. So code the 1,2,3 as characters
+i.e., ``1'', ``2''\ldots{} - We will eventually want the data to be
+factors again so it will match up with the other rasters. So lastly,
+convert the data to a factor (using as.factor()).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{terwilliger\_df}\SpecialCharTok{$}\NormalTok{SoilBurnSe }\OtherTok{\textless{}{-}} \FunctionTok{as.character}\NormalTok{(terwilliger\_df}\SpecialCharTok{$}\NormalTok{SoilBurnSe)}
+
+
+\NormalTok{terwilliger\_df}\SpecialCharTok{$}\NormalTok{SoilBurnSe[terwilliger\_df}\SpecialCharTok{$}\NormalTok{SoilBurnSe }\SpecialCharTok{==} \StringTok{"High"}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{"4"}
+\NormalTok{terwilliger\_df}\SpecialCharTok{$}\NormalTok{SoilBurnSe[terwilliger\_df}\SpecialCharTok{$}\NormalTok{SoilBurnSe }\SpecialCharTok{==} \StringTok{"Moderate"}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{"3"}
+\NormalTok{terwilliger\_df}\SpecialCharTok{$}\NormalTok{SoilBurnSe[terwilliger\_df}\SpecialCharTok{$}\NormalTok{SoilBurnSe }\SpecialCharTok{==} \StringTok{"Low"}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{"2"}
+\NormalTok{terwilliger\_df}\SpecialCharTok{$}\NormalTok{SoilBurnSe[terwilliger\_df}\SpecialCharTok{$}\NormalTok{SoilBurnSe }\SpecialCharTok{==} \StringTok{"Unburned"}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{"1"}
+
+\NormalTok{terwilliger\_df}\SpecialCharTok{$}\NormalTok{SoilBurnSe }\OtherTok{\textless{}{-}} \FunctionTok{factor}\NormalTok{(terwilliger\_df}\SpecialCharTok{$}\NormalTok{SoilBurnSe)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{4}
+\tightlist
+\item
+  Try plotting again.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_raster}\NormalTok{(}\AttributeTok{data =}\NormalTok{ beachiecrek\_df, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ x, }\AttributeTok{y =}\NormalTok{ y, }\AttributeTok{fill =}\NormalTok{ Layer\_1)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_raster}\NormalTok{(}\AttributeTok{data =}\NormalTok{ holidayfarm\_df, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ x, }\AttributeTok{y =}\NormalTok{ y, }\AttributeTok{fill =}\NormalTok{ Layer\_1)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_raster}\NormalTok{(}\AttributeTok{data =}\NormalTok{ terwilliger\_df, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ x, }\AttributeTok{y =}\NormalTok{ y, }\AttributeTok{fill =}\NormalTok{ SoilBurnSe)) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_brewer}\NormalTok{(}\AttributeTok{palette =} \StringTok{"Spectral"}\NormalTok{, }\AttributeTok{direction=}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Raster pixels are placed at uneven horizontal intervals and will be shifted
+## i Consider using `geom_tile()` instead.
+## Raster pixels are placed at uneven horizontal intervals and will be shifted
+## i Consider using `geom_tile()` instead.
+\end{verbatim}
+
+\includegraphics{5-OR-fires_files/figure-latex/plot-projected-raster2-1.pdf}
+The scale bar make sense! It would be nice to have a baselayer map to
+see where is Oregon these fires are.
+
+\hypertarget{lab-part-4-adding-in-vector-data}{%
+\section{Lab part 4: Adding in vector
+data}\label{lab-part-4-adding-in-vector-data}}
+
+I found a nice ecoregion map on the OR spatial data website.
+\url{https://spatialdata.oregonexplorer.info/geoportal/details;id=3c7862c4ae664993ad1531907b1e413e}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\tightlist
+\item
+  Load the data into R, it is in the OR-ecoregions folder.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{oregon\_ecoregions }\OtherTok{\textless{}{-}} \FunctionTok{st\_read}\NormalTok{(}\StringTok{"/Users/lwelsh/Desktop/ds{-}environ{-}LW/5{-}OR{-}fires/OR{-}ecoregions/Ecoregions\_OregonConservationStrategy.shp"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Reading layer `Ecoregions_OregonConservationStrategy' from data source 
+##   `/Users/lwelsh/Desktop/ds-environ-LW/5-OR-fires/OR-ecoregions/Ecoregions_OregonConservationStrategy.shp' 
+##   using driver `ESRI Shapefile'
+## Simple feature collection with 9 features and 6 fields
+## Geometry type: POLYGON
+## Dimension:     XY
+## Bounding box:  xmin: 183871.7 ymin: 88600.88 xmax: 2345213 ymax: 1675043
+## Projected CRS: NAD83 / Oregon GIC Lambert (ft)
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Check the projection and re-project if needed. We did not cover this
+  in the lecture demo, but for vector data, use st\_transform()
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{st\_crs}\NormalTok{(oregon\_ecoregions) }\SpecialCharTok{==} \FunctionTok{st\_crs}\NormalTok{(holidayfarm\_rast)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] FALSE
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{oregon\_ecoregions }\OtherTok{\textless{}{-}} \FunctionTok{st\_transform}\NormalTok{(oregon\_ecoregions, }\FunctionTok{crs}\NormalTok{(holidayfarm\_rast))}
+\FunctionTok{st\_crs}\NormalTok{(oregon\_ecoregions) }\SpecialCharTok{==} \FunctionTok{st\_crs}\NormalTok{(holidayfarm\_rast)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Plot all of the data together (the rasters and vector data). You can
+  layer on geom\_sf into ggplot with the other rasters just like you
+  would add another raster.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{geom\_raster}\NormalTok{(}\AttributeTok{data =}\NormalTok{ beachiecrek\_df, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ x, }\AttributeTok{y =}\NormalTok{ y, }\AttributeTok{fill =}\NormalTok{ Layer\_1)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_raster}\NormalTok{(}\AttributeTok{data =}\NormalTok{ holidayfarm\_df, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ x, }\AttributeTok{y =}\NormalTok{ y, }\AttributeTok{fill =}\NormalTok{ Layer\_1)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_raster}\NormalTok{(}\AttributeTok{data =}\NormalTok{ terwilliger\_df, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ x, }\AttributeTok{y =}\NormalTok{ y, }\AttributeTok{fill =}\NormalTok{ SoilBurnSe)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{data =}\NormalTok{ oregon\_ecoregions, }\AttributeTok{fill =} \ConstantTok{NA}\NormalTok{, }\AttributeTok{color =} \StringTok{"black"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_brewer}\NormalTok{(}\AttributeTok{palette =} \StringTok{"Spectral"}\NormalTok{, }\AttributeTok{direction=}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Raster pixels are placed at uneven horizontal intervals and will be shifted
+## i Consider using `geom_tile()` instead.
+## Raster pixels are placed at uneven horizontal intervals and will be shifted
+## i Consider using `geom_tile()` instead.
+\end{verbatim}
+
+\includegraphics{5-OR-fires_files/figure-latex/plot-projected-raster-withmap-1.pdf}
+We could get fancy and zoom into the correct region using extent, which
+we will cover next week. For now, this looks pretty good.
+
+\hypertarget{lab-part-5-exploring-patterns-of-fire-severity}{%
+\section{Lab part 5: Exploring patterns of fire
+severity}\label{lab-part-5-exploring-patterns-of-fire-severity}}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\tightlist
+\item
+  Create a barplot with the count of each fire severity category.
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  Use scale\_fill\_brewer(palette = ``Spectral'', direction=-1) to get
+  the bars to match the maps.
+\item
+  Plot the proportion on the y. To do this, in geom\_bar, include y =
+  (..count..)/sum(..count..). EX: aes(x= Layer\_1, y =
+  (..count..)/sum(..count..)
+\end{itemize}
+
+HINT: Rather annoyingly, you will need to convert the layer values to
+factors again to get fill to recognize them. EX:
+fill=as.factor(Layer\_1)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{names}\NormalTok{(terwilliger\_df)[}\FunctionTok{names}\NormalTok{(terwilliger\_df) }\SpecialCharTok{==} \StringTok{"SoilBurnSe"}\NormalTok{] }\OtherTok{\textless{}{-}} \StringTok{"Layer\_1"}
+\NormalTok{all\_fires\_df }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(beachiecrek\_df, holidayfarm\_df, terwilliger\_df)}
+
+\FunctionTok{ggplot}\NormalTok{(all\_fires\_df, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \FunctionTok{as.factor}\NormalTok{(Layer\_1), }\AttributeTok{y =}\NormalTok{ (..count..)}\SpecialCharTok{/}\FunctionTok{sum}\NormalTok{(..count..), }\AttributeTok{fill =} \FunctionTok{as.factor}\NormalTok{(Layer\_1))) }\SpecialCharTok{+}
+  \FunctionTok{geom\_bar}\NormalTok{(}\AttributeTok{position =} \StringTok{"dodge"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_brewer}\NormalTok{(}\AttributeTok{palette =} \StringTok{"Spectral"}\NormalTok{, }\AttributeTok{direction =} \SpecialCharTok{{-}}\DecValTok{1}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \StringTok{"Severity"}\NormalTok{, }\AttributeTok{y =} \StringTok{"Proportion"}\NormalTok{, }\AttributeTok{title =} \StringTok{"Proportion of Fire Severity Categories"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: The dot-dot notation (`..count..`) was deprecated in ggplot2 3.4.0.
+## i Please use `after_stat(count)` instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+## generated.
+\end{verbatim}
+
+\includegraphics{5-OR-fires_files/figure-latex/plot-hist-1.pdf} b. What
+do you notice about the frequency of different severity classes when you
+compare these barplots. How does this relate to the Haldofsky reading?
+ANSWER: Low and Moderate are the most frequent, with moderate
+significantly higher than low. The reading discussed how burned areas
+were already at higher risk of reburn, this could be shown in the data
+as moderate and low burn sites could be reburning
+
+Also, if the legend label bothers you (as it does for me) Check out this
+tutorial:
+\url{https://www.datanovia.com/en/blog/ggplot-legend-title-position-and-labels/}
+
+\end{document}
