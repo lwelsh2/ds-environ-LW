@@ -1,7 +1,9 @@
 ---
-title: Lab 5 Oregon Fires
-output: pdf_document
-author: Lauren Ponisio
+title: "Lab 5 Oregon Fires"
+author: "Lauren Ponisio"
+output:
+  html_document:
+    df_print: paged
 ---
 
 ```{r load-libraries, echo=FALSE, results="hide", message=FALSE, warning=FALSE}
@@ -161,7 +163,6 @@ Don't change the name from beachie_rast.
 
 ```{r reproject-raster}
 # This should return TRUE
-
 beachiecrek_rast = project(beachiecrek_rast, crs(holidayfarm_rast))
 crs(beachiecrek_rast, proj = TRUE) == crs(holidayfarm_rast, proj = TRUE)
 ```
