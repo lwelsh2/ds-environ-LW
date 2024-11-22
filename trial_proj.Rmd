@@ -1,0 +1,23 @@
+---
+title: "Untitled"
+output: html_document
+date: "2024-11-20"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(dplyr, warn.conflicts = FALSE)
+library(readr)
+library(tidyr)
+
+```
+
+```{r}
+OBA <- read.csv("OBA_2018-2023_combined_dataset_working.csv")
+```
+
+```{r}
+OBA_trim <- OBA %>% select(Associated.plant, PlantSpecies, Site, GenusSpecies)
+```
+
