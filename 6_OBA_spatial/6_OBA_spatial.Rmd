@@ -1,6 +1,6 @@
 ---
 title: "Exploring bee-related spatial data"
-output: github_document
+output: html_document
 author:
   - Lauren Ponisio
 ---

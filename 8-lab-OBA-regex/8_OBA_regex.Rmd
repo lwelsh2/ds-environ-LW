@@ -1,0 +1,173 @@
+---
+title: "Using regular expressions"
+output: github_document
+author:
+  - Lauren Ponisio
+---
+
+<!-- Lesson Overview -->
+
+# Conservation/ecology Topics 
+
+> - Species distributions 
+
+# Computational Topics
+> -  Use regular expressions to clean and catagorize data
+
+-------------------------------
+```{r load-libraries, echo=FALSE, results="hide", message=FALSE, warning=FALSE}
+library(ggplot2)
+library(dplyr)
+library(igraph)
+library(networkD3)
+library(stringr)
+```
+
+# Part 1: Oregon bee atlas data exploration 
+
+Import the OBA data using your favorite parsing function, name the data oba. 
+
+a. 
+```{r}
+oba = read.csv("data/OBA_2018-2023.csv")
+
+```
+
+
+b. Examine the unique entries of 'Associated.plant' using any function you find useful. What are at least two patterns in the associated taxa string what should be removed if we want consistent plant names? (Make a list together as a class). Only print the first 10 here to avoid having a giant output. 
+
+
+```{r}
+sort(unique(oba$Associated.plant))[1:10]
+
+```
+
+1. Sometimes there is only on word, often family, genus, or common name. We will sort these out by creating a column for plant resolution.
+2. The common name is sometimes listed after the scientific name in (), we can strip this out.
+3. Sometimes there is a list of plant names, cannot do much with those but drop them. 
+4. Some are blank (no name), we will drop these. 
+5. One says "net"
+6. Sometimes a genus is followed by an sp. and sometimes not. I assume this can be solved with a regular expression, ignoring the rows with a family name, but I could not work out how. 
+7. There are a few with "genus XX" or "genus XX"
+
+There may be more I am missing. :/ 
+
+In week in lecture last I used a brute force pattern to remove some of these issues so we could plot them as a network. Now that we are familiar with regular expressions we can do better. 
+
+c. Work together as a class to resolve the issues you listed with the associated taxa column using any function combination that uses regular expressions. You can reassign the contents of the column Associated.plant or create a new column. Return the sorted, unique values, ex: sort(unique(oba$Associated.plant)). Leave the plants resolved only to genus of family for later. 
+
+I have removed a really strange issue with special characters (R converted an apostrophie into a special character) to start things off. 
+
+Hint: You must \ any special characters. For example to use \s (matches any space, tab, or newline) you must use \\s in your pattern.
+
+```{r}
+## Remove the special character
+oba$Associated.plant <- str_replace_all(oba$Associated.plant, "\x92", "")
+ 
+## Remove the rows with no plant name.
+oba <- oba[oba$Associated.plant != "",]
+ 
+## Remove "net"
+oba <- oba[oba$Associated.plant != "Net",]
+ 
+## Fix yarrow
+oba$Associated.plant[oba$Associated.plant == "Yarrow"] <- "Achillea millefolium"
+ 
+## Remove a random weird one
+oba <- oba[oba$Associated.plant != "Weedy yellow comp.",]
+ 
+## Remove names in ()
+oba$Associated.plant <- str_replace_all(oba$Associated.plant, "\\(.*?\\)", "")
+ 
+## Still some issues with words after commas
+oba$Associated.plant <- str_replace_all(oba$Associated.plant, ",.*$", "")
+ 
+## Some have write space at the end of the string now
+oba$Associated.plant <- str_replace_all(oba$Associated.plant, "\\s+$", "")
+ 
+## And now there are a few instances where sp doesn't have a period.
+oba$Associated.plant <- str_replace_all(oba$Associated.plant, " sp$", " sp.")
+ 
+## Remove the or and everything after it, could also consider dropping these...
+oba$Associated.plant <- str_replace_all(oba$Associated.plant, " or .*", "")
+ 
+sort(unique(oba$Associated.plant))[1:10]
+```
+
+# Part 2: Making a column for plant resolution
+
+a. Some plant species are resolved to species/subspecies, others to genus and others to family. If there are two or three words, we can assume the plant is resolved to species and subspecies, respectively, except if the string ends in "sp." If there is only one word, this could be a genus or a family name. Family names always end in "aceae", for example Lamiaceae (mints), Asteraceae (daisies). 
+
+We want to make a new column called plantResolution and assign it to "Family", "Genus" or "Species" depending on the level of resolution associated taxa is resolved to. We will do this in two steps. 
+
+First use regular expressions to count up the number of words in each element of associated taxa. Assign the count to a new column called plantTaxaWordCount. Print the first 50 elements.
+
+Hint: `str_count` may be useful. 
+
+```{r}
+# Count the number of words
+oba$plantTaxaWordCount <- str_count(oba$Associated.plant, "\\S+")
+
+# Print the first 50 elements
+print(head(oba, 50))
+
+```
+
+b. Write a for loop to assigned each entry of the column plantResolution to be "family", "genus" or "species". `table()` the final result. 
+Hint: Don't forget to initialize the new column. Starting with all NAs may be useful. 
+Hint hint: The function `ifelse` returns one value if a TRUE and another if FALSE. It could be useful depending on your approach. 
+Hint hint hint: `grepl` will return or TRUE or FALSE depending on whether it finds the pattern. Be careful with periods in patterns because alone they are a wild card character.  
+
+```{r}
+# Initialize the new column with NA
+oba$plantResolution <- NA
+
+# Loop through each row
+for (i in 1:nrow(oba)) {
+  # Check if it ends with "aceae" (family)
+  if (grepl("aceae$", oba$Associated.plant[i])) {
+    oba$plantResolution[i] <- "Family"
+  }
+  # Check if it has one word and is not a family (genus)
+  else if (str_count(oba$Associated.plant[i], "\\S+") == 1) {
+    oba$plantResolution[i] <- "Genus"
+  }
+  # Otherwise, assume it's a species or subspecies
+  else {
+    oba$plantResolution[i] <- "Species"
+  }
+}
+
+# Display the distribution of resolutions
+table(oba$plantResolution)
+
+```
+
+c. For those that are identified to genus but are lacking an sp., add that now so that they will not be treated as separate plant species (i.e., Rosa vs Rosa sp.). You can do this with a regular expression and using 'gsub' or 'string_replace_all' or by counting up the number of words in Associated.plant. 
+```{r}
+# Add "sp." to genus-level entries that lack it
+oba$Associated.plant <- ifelse(
+  oba$plantResolution == "Genus" & !grepl("\\ssp\\.$", oba$Associated.plant), 
+  paste0(oba$Associated.plant, " sp."), 
+  oba$Associated.plant
+)
+
+# To check that it worked
+unique(oba$Associated.plant[oba$plantResolution == "Genus"])
+
+```
+
+d. Create a new column called plantGenus that is the genus if the associated taxa was resolved to species or genus, and NA if it was resolved to family. 
+```{r}
+# Create the plantGenus column
+oba$plantGenus <- ifelse(
+  oba$plantResolution %in% c("Genus", "Species"),  # Check if resolved to genus or species
+  word(oba$Associated.plant, 1),                  # Extract the first word (genus)
+  NA                                              # Otherwise, assign NA
+)
+
+## To check finish with
+table(oba$plantGenus)
+```
+
+Now you have nice clean plant data to make networks out of, or more easily count up the number of plant species in an area. 
